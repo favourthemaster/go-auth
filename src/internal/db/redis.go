@@ -1,13 +1,14 @@
 package db
 
 import (
+	"authentication/src/config"
 	"context"
-	"course-backend/src/config"
 	"github.com/redis/go-redis/v9"
 )
 
 var redisClient *redis.Client
 
+// InitRedis initializes the Redis client with the given address, password, and database number.
 func InitRedis(addr, password string, db int) {
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:     addr,
@@ -16,6 +17,7 @@ func InitRedis(addr, password string, db int) {
 	})
 }
 
+// InitRedisFromConfig initializes the Redis client using configuration values.
 func InitRedisFromConfig() {
 	cfg := config.GetRedisConfig()
 	redisClient = redis.NewClient(&redis.Options{
@@ -26,10 +28,12 @@ func InitRedisFromConfig() {
 	})
 }
 
+// GetRedisClient returns the Redis client instance.
 func GetRedisClient() *redis.Client {
 	return redisClient
 }
 
+// PingRedis checks the connection to the Redis server.
 func PingRedis(ctx context.Context) error {
 	if redisClient == nil {
 		return redis.ErrClosed

@@ -1,25 +1,27 @@
 package auth
 
 import (
-	"course-backend/src/internal/dto"
-	"course-backend/src/internal/errs"
-	"course-backend/src/utils"
+	"authentication/src/internal/dto"
+	"authentication/src/internal/errs"
+	"authentication/src/utils"
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"log"
 )
 
+// AuthHandler provides HTTP handlers for authentication endpoints.
 type AuthHandler struct {
 	AuthService
 }
 
-// NewAuthHandler creates a new authHandler with the provided AuthService.
+// NewAuthHandler creates a new AuthHandler with the provided AuthService.
 func NewAuthHandler(as AuthService) *AuthHandler {
 	return &AuthHandler{
 		AuthService: as,
 	}
 }
 
+// Register handles user registration requests.
 func (h *AuthHandler) Register(c *fiber.Ctx) error {
 
 	ctx := c.Context()
@@ -64,6 +66,7 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(utils.SuccessResponse(nil, "User registered successfully, please check your email for verification instructions"))
 }
 
+// Login handles user login requests.
 func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	ctx := c.Context()
 	var req dto.LoginRequest
@@ -122,6 +125,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(utils.SuccessResponse(loginResponse, "Login successful"))
 }
 
+// Logout handles user logout requests.
 func (h *AuthHandler) Logout(c *fiber.Ctx) error {
 	ctx := c.Context()
 	var req dto.LogoutRequest
@@ -214,6 +218,7 @@ func (h *AuthHandler) SendVerificationEmail(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(utils.SuccessResponse(nil, "Verification email sent successfully"))
 }
 
+// ForgotPassword handles password reset requests.
 func (h *AuthHandler) ForgotPassword(c *fiber.Ctx) error {
 	ctx := c.Context()
 	var req dto.ForgotPasswordRequest
@@ -246,6 +251,7 @@ func (h *AuthHandler) ForgotPassword(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(utils.SuccessResponse(nil, "A password reset link has been sent to your email"))
 }
 
+// ResetPassword handles password reset requests.
 func (h *AuthHandler) ResetPassword(c *fiber.Ctx) error {
 	ctx := c.Context()
 	var req dto.ResetPasswordRequest

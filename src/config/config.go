@@ -1,3 +1,4 @@
+// Package config provides configuration management for the application.
 package config
 
 import (
@@ -6,6 +7,7 @@ import (
 	"strconv"
 )
 
+// Init loads environment variables and performs additional configuration initialization.
 func Init() error {
 	// Load environment variables from .env file
 	if err := LoadEnv(); err != nil {
@@ -17,7 +19,7 @@ func Init() error {
 	return nil
 }
 
-// LoadEnv loads environment variables from a .env file
+// LoadEnv loads environment variables from a .env file.
 func LoadEnv() error {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -26,7 +28,7 @@ func LoadEnv() error {
 	return nil
 }
 
-// GetEnv retrieves an environment variable or returns a default value if not set
+// getEnv retrieves an environment variable or returns a default value if not set.
 func getEnv(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if value == "" {
@@ -35,12 +37,14 @@ func getEnv(key, defaultValue string) string {
 	return value
 }
 
+// GetMailerConfig returns the mailer configuration from environment variables.
 func GetMailerConfig() MailerConfig {
 	return MailerConfig{
 		Sender: getEnv("MAIL_SENDER", "noreply@project.com"),
 	}
 }
 
+// GetRedisConfig returns the Redis configuration from environment variables.
 func GetRedisConfig() RedisConfig {
 	db, err := strconv.Atoi(getEnv("REDIS_DB", "0"))
 	if err != nil {
@@ -55,7 +59,7 @@ func GetRedisConfig() RedisConfig {
 	}
 }
 
-// GetDBConfig returns the database configuration from environment variables
+// GetDBConfig returns the database configuration from environment variables.
 func GetDBConfig() DBConfig {
 	return DBConfig{
 		Host:     getEnv("DB_HOST", "localhost"),

@@ -1,10 +1,10 @@
 package auth
 
 import (
+	"authentication/src/internal/db"
+	"authentication/src/internal/errs"
+	"authentication/src/internal/models"
 	"context"
-	"course-backend/src/internal/db"
-	"course-backend/src/internal/errs"
-	"course-backend/src/internal/models"
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"

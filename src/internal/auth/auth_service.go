@@ -1,42 +1,45 @@
 package auth
 
 import (
+	"authentication/src/internal/dto"
+	"authentication/src/internal/errs"
+	"authentication/src/internal/models"
+	"authentication/src/internal/user"
+	"authentication/src/utils"
 	"context"
-	"course-backend/src/internal/dto"
-	"course-backend/src/internal/errs"
-	"course-backend/src/internal/models"
-	"course-backend/src/internal/user"
-	"course-backend/src/utils"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"time"
 )
 
+// AuthService defines authentication-related operations for users.
 type AuthService interface {
-	// Login authenticates a user with the provided credentials
+	// Login authenticates a user with the provided credentials.
 	Login(ctx context.Context, req *dto.LoginRequest, sess *session.Session) (*models.User, error)
-	// Register creates a new user with the provided details
+	// Register creates a new user with the provided details.
 	Register(ctx context.Context, req *dto.RegisterRequest) (*dto.RegisterResponse, error)
-	// Logout logs out the user
+	// Logout logs out the user.
 	Logout(ctx context.Context, req *dto.LogoutRequest, sess *session.Session) error
-	// SendVerificationEmail sends a verification email to the user
+	// SendVerificationEmail sends a verification email to the user.
 	SendVerificationEmail(ctx context.Context, req *dto.SendEmailVerificationRequest) error
-	// VerifyEmail verifies the user's email using the provided token
+	// VerifyEmail verifies the user's email using the provided token.
 	VerifyEmail(ctx context.Context, req *dto.VerifyEmailRequest) error
-	// ForgotPassword initiates the forgot password process for the user
+	// ForgotPassword initiates the forgot password process for the user.
 	ForgotPassword(ctx context.Context, req *dto.ForgotPasswordRequest) error
-	// ResetPassword resets the user's password using the provided reset token
+	// ResetPassword resets the user's password using the provided reset token.
 	ResetPassword(ctx context.Context, req *dto.ResetPasswordRequest) error
 
 	// Additional methods can be added as needed
 
 }
+
+// authService implements AuthService for authentication logic.
 type authService struct {
 	UserService  user.UserService
 	TokenService TokenService
 	Mailer       utils.Mailer
 }
 
-// NewAuthService creates a new AuthService instance
+// NewAuthService creates a new AuthService instance.
 func NewAuthService(us user.UserService, ts TokenService) AuthService {
 	return &authService{
 		UserService:  us,
@@ -45,7 +48,7 @@ func NewAuthService(us user.UserService, ts TokenService) AuthService {
 	}
 }
 
-// Login authenticates a user with the provided credentials
+// Login authenticates a user with the provided credentials.
 func (s *authService) Login(ctx context.Context, req *dto.LoginRequest, sess *session.Session) (*models.User, error) {
 
 	getUserByEmailDTO := &dto.GetUserByEmailDTO{

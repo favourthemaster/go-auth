@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"course-backend/src/internal/models"
+	"authentication/src/internal/models"
 	"github.com/google/uuid"
 )
 

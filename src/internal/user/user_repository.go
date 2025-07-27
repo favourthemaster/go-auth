@@ -1,12 +1,13 @@
 package user
 
 import (
+	"authentication/src/internal/models"
 	"context"
-	"course-backend/src/internal/models"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
+// UserRepository defines database operations for user management.
 type UserRepository interface {
 	CreateUser(ctx context.Context, user *models.User) error
 	UpdateUser(ctx context.Context, user *models.User) error
@@ -18,28 +19,29 @@ type UserRepository interface {
 	GetUsersByIDs(ctx context.Context, userIDs []uuid.UUID) ([]*models.User, error)
 }
 
+// userRepository implements UserRepository for user database logic.
 type userRepository struct {
 	db *gorm.DB
 }
 
-// NewUserRepository creates a new UserRepository instance
+// NewUserRepository creates a new UserRepository instance.
 func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userRepository{
 		db: db,
 	}
 }
 
-// CreateUser creates a new user in the database
+// CreateUser creates a new user in the database.
 func (r *userRepository) CreateUser(ctx context.Context, user *models.User) error {
 	return r.db.WithContext(ctx).Create(user).Error
 }
 
-// UpdateUser updates an existing user in the database
+// UpdateUser updates an existing user in the database.
 func (r *userRepository) UpdateUser(ctx context.Context, user *models.User) error {
 	return r.db.WithContext(ctx).Save(user).Error
 }
 
-// GetUserByID creates a new user in the database
+// GetUserByID retrieves a user by ID from the database.
 func (r *userRepository) GetUserByID(ctx context.Context, userID uuid.UUID) (*models.User, error) {
 	var user models.User
 	err := r.db.WithContext(ctx).First(&user, "id = ?", userID).Error

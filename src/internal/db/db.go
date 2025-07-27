@@ -1,9 +1,8 @@
 package db
 
 import (
-	"course-backend/src/config"
-	"course-backend/src/internal/models"
-	models2 "course-backend/src/internal/models/course"
+	"authentication/src/config"
+	"authentication/src/internal/models"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -17,7 +16,7 @@ var (
 	once sync.Once
 )
 
-// Connect initializes the database connection
+// Connect initializes the database connection.
 func Connect() error {
 	var err error
 	once.Do(func() {
@@ -32,11 +31,6 @@ func Connect() error {
 	//Migrate all models
 	err = Migrate(
 		models.User{},
-		models2.Course{},
-		models2.Lesson{},
-		models2.Chapter{},
-		models2.Block{},
-		models2.PaymentInfo{},
 	)
 	if err != nil {
 		return err
@@ -45,12 +39,12 @@ func Connect() error {
 	return nil
 }
 
-// GetDB returns the global database connection
+// GetDB returns the global database connection.
 func GetDB() *gorm.DB {
 	return DB
 }
 
-// Close closes the database connection
+// Close closes the database connection.
 func Close() error {
 	sqlDB, err := DB.DB()
 	if err != nil {

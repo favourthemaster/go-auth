@@ -1,5 +1,7 @@
+// Package config provides configuration management for the application.
 package config
 
+// DBConfig holds database configuration values.
 type DBConfig struct {
 	Host     string
 	Port     string
@@ -9,11 +11,13 @@ type DBConfig struct {
 	SSLMode  string
 }
 
+// MailerConfig holds mailer configuration values.
 type MailerConfig struct {
 	Sender string
 	//TODO: ADD THE REMAINING THINGS HERE
 }
 
+// RedisConfig holds Redis configuration values.
 type RedisConfig struct {
 	Host     string
 	Port     string

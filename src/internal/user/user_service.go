@@ -1,42 +1,45 @@
 package user
 
 import (
+	"authentication/src/internal/dto"
+	"authentication/src/internal/errs"
+	"authentication/src/internal/models"
+	"authentication/src/utils"
 	"context"
-	"course-backend/src/internal/dto"
-	"course-backend/src/internal/errs"
-	"course-backend/src/internal/models"
-	"course-backend/src/utils"
 	"errors"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
+// UserService defines user-related operations for the application.
 type UserService interface {
-	// GetUserByID retrieves a user by ID
+	// GetUserByID retrieves a user by ID.
 	GetUserByID(ctx context.Context, userID uuid.UUID) (*models.User, error)
-	// GetUserByEmail retrieves a user by email
+	// GetUserByEmail retrieves a user by email.
 	GetUserByEmail(ctx context.Context, emailDTO *dto.GetUserByEmailDTO) (*models.User, error)
-	// CreateUser creates a new user
+	// CreateUser creates a new user.
 	CreateUser(ctx context.Context, userDTO *dto.CreateUserDTO) (*models.User, error)
-	// UpdateUser updates an existing user
+	// UpdateUser updates an existing user.
 	UpdateUser(ctx context.Context, user *models.User) (*models.User, error)
-	// DeleteUser deletes a user by ID
+	// DeleteUser deletes a user by ID.
 	DeleteUser(ctx context.Context, userID uuid.UUID) error
-	// ListUsers lists users with pagination
+	// ListUsers lists users with pagination.
 	//ListUsers(ctx context.Context, limit, offset int) ([]dto.UserResponse, error)
 }
 
+// userService implements UserService for user management logic.
 type userService struct {
 	ur UserRepository
 }
 
-// NewUserService creates a new UserService instance
+// NewUserService creates a new UserService instance.
 func NewUserService(ur UserRepository) UserService {
 	return &userService{
 		ur: ur,
 	}
 }
 
+// GetUserByID retrieves a user by ID.
 func (u userService) GetUserByID(ctx context.Context, userID uuid.UUID) (*models.User, error) {
 	user, err := u.ur.GetUserByID(ctx, userID)
 	if err != nil {
@@ -48,6 +51,7 @@ func (u userService) GetUserByID(ctx context.Context, userID uuid.UUID) (*models
 	return user, nil
 }
 
+// GetUserByEmail retrieves a user by email.
 func (u userService) GetUserByEmail(ctx context.Context, emailDTO *dto.GetUserByEmailDTO) (*models.User, error) {
 	user, err := u.ur.GetUserByEmail(ctx, emailDTO.Email)
 	if err != nil {
@@ -60,6 +64,7 @@ func (u userService) GetUserByEmail(ctx context.Context, emailDTO *dto.GetUserBy
 	return user, nil
 }
 
+// CreateUser creates a new user.
 func (u userService) CreateUser(ctx context.Context, userDTO *dto.CreateUserDTO) (*models.User, error) {
 
 	existingUser, err := u.ur.GetUserByEmail(ctx, userDTO.Email)
@@ -105,6 +110,7 @@ func (u userService) CreateUser(ctx context.Context, userDTO *dto.CreateUserDTO)
 	return newUser, nil
 }
 
+// UpdateUser updates an existing user.
 func (u userService) UpdateUser(ctx context.Context, user *models.User) (*models.User, error) {
 
 	_, err := u.ur.GetUserByID(ctx, user.ID)
@@ -125,6 +131,7 @@ func (u userService) UpdateUser(ctx context.Context, user *models.User) (*models
 	return user, nil
 }
 
+// DeleteUser deletes a user by ID.
 func (u userService) DeleteUser(ctx context.Context, userID uuid.UUID) error {
 
 	_, err := u.ur.GetUserByID(ctx, userID)
@@ -144,6 +151,7 @@ func (u userService) DeleteUser(ctx context.Context, userID uuid.UUID) error {
 	return nil
 }
 
+// ListUsers lists users with pagination.
 func (u userService) ListUsers(ctx context.Context, limit, offset int) ([]dto.UserResponse, error) {
 
 	users, err := u.ur.ListUsers(ctx, limit, offset)

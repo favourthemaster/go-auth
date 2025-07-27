@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// RequireAuth is a middleware that ensures the user is authenticated before accessing protected routes.
 func RequireAuth() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		sess, err := store.Get(c)
