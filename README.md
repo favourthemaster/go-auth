@@ -13,7 +13,7 @@ This project is a Go-based authentication service using Fiber, designed for secu
 ## Setup Instructions
 1. **Clone the repository:**
    ```sh
-   git clone <repo-url>
+   git clone https://github.com/favourthemaster/go-auth/
    cd authentication
    ```
 2. **Install dependencies:**
